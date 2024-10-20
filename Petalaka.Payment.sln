@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34714.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Petalaka.Payment.API", "Petalaka.Payment.API\Petalaka.Payment.API.csproj", "{100D3BB9-3590-4661-B545-09BAAF578F56}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.API", "1.API", "{2BF6E8E1-066C-4647-BEAA-E1075DEB9ECB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Service", "2.Service", "{01CC9E5D-4D2B-4EDB-AEF2-ABB90946045F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Repository", "3.Repository", "{A7446286-FD8E-44B9-939C-E00D7947797E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Petalaka.Payment.Service", "Petalaka.Payment.Service\Petalaka.Payment.Service.csproj", "{C39E6DB3-8772-428B-9A4C-2D804B65AB7C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Petalaka.Payment.Repository", "Petalaka.Payment.Repository\Petalaka.Payment.Repository.csproj", "{6800B261-228E-49B3-A9FE-8AE773C22BA4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Core", "4.Core", "{D87321B3-8065-4C28-9F24-A4719459C646}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Petalaka.Payment.Core", "Petalaka.Payment.Core\Petalaka.Payment.Core.csproj", "{32F1753A-E1E6-4835-AFA4-C777DDBF7A1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{100D3BB9-3590-4661-B545-09BAAF578F56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{100D3BB9-3590-4661-B545-09BAAF578F56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{100D3BB9-3590-4661-B545-09BAAF578F56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{100D3BB9-3590-4661-B545-09BAAF578F56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C39E6DB3-8772-428B-9A4C-2D804B65AB7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C39E6DB3-8772-428B-9A4C-2D804B65AB7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C39E6DB3-8772-428B-9A4C-2D804B65AB7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C39E6DB3-8772-428B-9A4C-2D804B65AB7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6800B261-228E-49B3-A9FE-8AE773C22BA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6800B261-228E-49B3-A9FE-8AE773C22BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6800B261-228E-49B3-A9FE-8AE773C22BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6800B261-228E-49B3-A9FE-8AE773C22BA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32F1753A-E1E6-4835-AFA4-C777DDBF7A1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32F1753A-E1E6-4835-AFA4-C777DDBF7A1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32F1753A-E1E6-4835-AFA4-C777DDBF7A1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32F1753A-E1E6-4835-AFA4-C777DDBF7A1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{100D3BB9-3590-4661-B545-09BAAF578F56} = {2BF6E8E1-066C-4647-BEAA-E1075DEB9ECB}
+		{C39E6DB3-8772-428B-9A4C-2D804B65AB7C} = {01CC9E5D-4D2B-4EDB-AEF2-ABB90946045F}
+		{6800B261-228E-49B3-A9FE-8AE773C22BA4} = {A7446286-FD8E-44B9-939C-E00D7947797E}
+		{32F1753A-E1E6-4835-AFA4-C777DDBF7A1A} = {D87321B3-8065-4C28-9F24-A4719459C646}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {83276BFC-556C-4B8E-91FB-9629406ACE4B}
+	EndGlobalSection
+EndGlobal
