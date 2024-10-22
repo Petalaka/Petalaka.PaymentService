@@ -15,7 +15,10 @@ public static class TimeStampHelper
     {
         return CoreHelper.SystemTimeNow.AddMinutes(10).ToUnixTimeSeconds().ToString();
     }
-    
+    public static long GenerateUnixTimeStampToMilisecond()
+    {
+        return CoreHelper.SystemTimeNow.ToUnixTimeMilliseconds();
+    }
     public static string GenerateUnixTimeStamp()
     {
         return CoreHelper.SystemTimeNow.ToUnixTimeSeconds().ToString();
