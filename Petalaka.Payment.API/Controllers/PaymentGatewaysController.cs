@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Petalaka.Payment.API.Base;
 using Petalaka.Payment.API.ModelViews.RequestModels.PaymentGatewayRequest;
@@ -23,6 +24,18 @@ public class PaymentGatewaysController : BaseController
         _mapper = mapper;
     }
     
+    /// <summary>
+    /// Get all payment gateways
+    /// </summary>
+    /// <remarks>
+    /// SortOptions:
+    /// - NameAlphabeticalAz (A -> Z) = 1,
+    /// - NameAlphabeticalZa (Z -> A) = 2,
+    /// - CreatedTimeAscending = 3,
+    /// - CreatedTimeDescending = 4
+    /// </remarks>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("v1/payment-gateways")]
     public async Task<ActionResult<BaseResponsePagination<GetPaymentGatewayResponse>>> 
@@ -37,8 +50,20 @@ public class PaymentGatewaysController : BaseController
         return Ok(paymentGateways);
     }
     
+    /// <summary>
+    /// Create new payment gateway
+    /// </summary>
+    /// <remarks>
+    /// Require authentication as admin role
+    ///
+    /// - Name (REQUIRED): Full name should only contain letters and spaces, no special characters or numbers
+    /// - RegionCode (REQUIRED): No validation
+    /// </remarks>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("v1/payment-gateway")]
+    [Authorize(Roles = "ADMIN")]
     public async Task<ActionResult<BaseResponse<CreatePaymentGatewayResponse>>> CreatePaymentGateway([FromForm] CreatePaymentGatewayRequest request)
     {
         var model = _mapper.Map<PaymentGatewayBusinessModel>(request);

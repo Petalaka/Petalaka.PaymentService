@@ -9,6 +9,7 @@ public class CreatePaymentGatewayRequest
     [Required]
     [RegularExpression(@"^[\p{L}[\s]+$", ErrorMessage = "Full name should only contain letters and spaces, no special characters or numbers")]
     public string Name { get; set; }
+    [Required]
     [FromForm(Name = "regionCode")]
     public string RegionCode { get; set; }
     [FromForm(Name = "imageIcon")]
