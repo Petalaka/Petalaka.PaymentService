@@ -25,8 +25,14 @@ builder.Services.AddConfigureServiceAPI(builder.Configuration);
 var app = builder.Build();
 app.UseCors("AllowAll");
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseHttpsRedirection();
+if (app.Environment.IsProduction())
 {
+    app.Use((context, next) =>
+    {
+        context.Request.Scheme = "https";
+        return next(context);
+    });
 }
 await app.UseInitializeDatabaseAsync();
 app.UseCors("AllowAll");
