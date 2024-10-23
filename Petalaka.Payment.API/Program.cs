@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Petalaka.Payment.API;
 using Petalaka.Payment.API.CustomMiddleware;
 using Petalaka.Payment.API.CustomModelConvention;
@@ -8,7 +9,16 @@ using Petalaka.Payment.Service.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.WebHost.ConfigureKestrel(options =>
+{
+    int port = Convert.ToInt32(builder.Configuration.GetSection("Port").Value);
+    // Set up Kestrel to listen on port 5001 and support HTTP/2
+    options.ListenAnyIP(port, listenOptions =>
+    {
+        listenOptions.UseHttps();
+        listenOptions.Protocols = HttpProtocols.Http2; // Enable HTTP/2
+    });
+});
 // Add services to the container.
 builder.Services.AddControllers(options =>
 {
