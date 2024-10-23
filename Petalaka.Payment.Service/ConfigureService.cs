@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Amazon.S3;
+using Petalaka.Payment.Service.Services;
+using Petalaka.Payment.Service.ThirdParties.ZaloPay.Settings;
+using Petalaka.PetStore.Service.Services;
 
 
 namespace Petalaka.Payment.Service
@@ -17,6 +20,8 @@ namespace Petalaka.Payment.Service
         {
             services.AddDependencyInjectionService(configuration);
             services.AddMasstransitRabbitmq(configuration);
+            services.AddZaloPayConfig(configuration);
+            services.AddGrpcConfig();
         }
 
         public static void AddMasstransitRabbitmq(this IServiceCollection services, IConfiguration configuration)
@@ -36,6 +41,28 @@ namespace Petalaka.Payment.Service
                 });
             });
             services.AddMassTransitHostedService();
+        }
+
+        public static void AddZaloPayConfig(this IServiceCollection services, IConfiguration configuration)
+        {
+            var zaloPayConfig = configuration.GetSection("ZaloPay");
+            services.AddSingleton<ZaloPaySettings>(options =>
+            {
+                var zaloPaySettings = new ZaloPaySettings
+                {
+                    AppId = zaloPayConfig.GetSection("AppId").Value,
+                    Key1 = zaloPayConfig.GetSection("Key1").Value,
+                    Key2 = zaloPayConfig.GetSection("Key2").Value,
+                    CallbackUrl = zaloPayConfig.GetSection("CallbackUrl").Value
+                };
+                zaloPaySettings.IsValid();
+                return zaloPaySettings;
+            });
+        }
+        
+        public static void AddGrpcConfig(this IServiceCollection services)
+        {
+            services.AddGrpc();
         }
     }
 }

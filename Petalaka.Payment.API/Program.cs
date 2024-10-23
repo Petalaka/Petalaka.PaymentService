@@ -4,6 +4,7 @@ using Petalaka.Payment.API.CustomMiddleware;
 using Petalaka.Payment.API.CustomModelConvention;
 using Petalaka.Payment.Repository;
 using Petalaka.Payment.Service;
+using Petalaka.Payment.Service.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,9 +28,10 @@ app.UseCors("AllowAll");
 if (app.Environment.IsDevelopment())
 {
 }
-
 await app.UseInitializeDatabaseAsync();
 app.UseCors("AllowAll");
+app.UseRouting();
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -38,8 +40,17 @@ app.UseSwaggerUI(c =>
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
-app.UseAuthorization();
 
+app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapGrpcService<PaymentService>();
+    endpoints.MapGet("/", async context =>
+    {
+        await context.Response.WriteAsync(JsonSerializer.Serialize(new
+            { Message = "Welcome to Petalaka.Payment.API" }));
+    });
+});
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -47,6 +58,7 @@ app.UseSwaggerUI(c =>
 });
 app.UseMiddleware<CustomExceptionHandlerMiddleware>();
 app.UseMiddleware<ValidateJwtTokenMiddleware>();
+
 app.MapControllers();
 
 app.Run();
