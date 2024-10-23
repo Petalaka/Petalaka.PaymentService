@@ -15,7 +15,6 @@ builder.WebHost.ConfigureKestrel(options =>
     // Set up Kestrel to listen on port 5001 and support HTTP/2
     options.ListenAnyIP(port, listenOptions =>
     {
-        listenOptions.UseHttps();
         listenOptions.Protocols = HttpProtocols.Http2; // Enable HTTP/2
     });
 });
