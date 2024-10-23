@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package Petalaka.PetStore.Service.Services;
+
+service PaymentManager {
+  rpc CreatePremiumPlanPayment (CreatePremiumPlanPaymentRequest) returns (CreatePremiumPlanPaymentResponse);
+}
+
+message PurchasePremiumPlanPayment {
+  string id = 1;
+  string name = 2;
+  double price = 3;
+  int32 duration = 4;
+  string user_id = 5;
+  string user_email = 6;
+  string user_phone = 7;
+}
+message PremiumPlanPayment {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  bool is_suspended = 5;
+  int32 max_quantity = 6;
+  int32 duration = 7;
+}
+message CreatePremiumPlanPaymentRequest {
+  string provider_id = 1;
+  PurchasePremiumPlanPayment premium_plan = 2;
+  double amount = 3;
+  string currency = 4;
+  string payment_method = 5;
+}
+
+message CreatePremiumPlanPaymentResponse {
+  string payment_url = 1;
+  string message = 2;
+  string zalo_pay_token = 3;
+  int32 code = 4;
+  bool success = 5;
+}

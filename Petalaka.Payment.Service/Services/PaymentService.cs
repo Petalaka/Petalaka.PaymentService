@@ -1,25 +1,23 @@
-﻿using Petalaka.Payment.Service.BusinessModels;
+﻿using Grpc.Core;
+using Petalaka.Payment.Core.Utils;
+using Petalaka.Payment.Service.BusinessModels;
 using Petalaka.Payment.Service.Interface;
 using Petalaka.Payment.Service.ThirdParties.ZaloPay.Interfaces;
 using Petalaka.Payment.Service.ThirdParties.ZaloPay.Settings;
+using Petalaka.PetStore.Service.Services;
 
 namespace Petalaka.Payment.Service.Services;
 
-public class PaymentService : IPaymentService
+public class PaymentService : PaymentManager.PaymentManagerBase, IPaymentService
 {
-    private readonly IZaloPayService _zaloPayService;
-    public PaymentService(IZaloPayService zaloPayService)
+    private readonly PaymentMethodFactory _paymentMethodFactory;
+
+    public PaymentService(PaymentMethodFactory paymentMethodFactory)
     {
-        _zaloPayService = zaloPayService;
+        _paymentMethodFactory = paymentMethodFactory;
     }
 
-    public class Item
-    {
-        public int Id = 2;
-        public string Name = "Item 1";
-        public long Amount = 100000;
-    }
-    public async Task<Dictionary<string, object>> CreateOrder(PaymentBusinessModel<Item> paymentBusinessModel)
+    /*public async Task<Dictionary<string, object>> CreateOrder(PaymentBusinessModel<Item> paymentBusinessModel)
     {
         var orderCreationSettings = new OrderCreationSettings<Item>()
         {
@@ -34,5 +32,29 @@ public class PaymentService : IPaymentService
             UserAddress = paymentBusinessModel.UserAddress
         };
         return await _zaloPayService.CreateOrderUrl(orderCreationSettings);
+    }*/
+    public override async Task<CreatePremiumPlanPaymentResponse> CreatePremiumPlanPayment(
+        CreatePremiumPlanPaymentRequest request, ServerCallContext context)
+    {
+        var paymentMethod = await _paymentMethodFactory.GetPaymentMethod(request.PaymentMethod);
+        var response = await paymentMethod.ProcessPayment(request);
+        if (response.Code != 1)
+        {
+            return (new CreatePremiumPlanPaymentResponse()
+            {
+                Message = response.Message,
+                Code = (int)response.Code!,
+                Success = false
+            });
+        }
+
+        return (new CreatePremiumPlanPaymentResponse()
+        {
+            Message = "Create premium plan payment successfully",
+            PaymentUrl = response.PaymentUrl,
+            ZaloPayToken = response.ZaloPayToken,
+            Code = (int)response.Code!,
+            Success = true
+        });
     }
 }

@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Amazon.Runtime.Internal.Transform;
+using Newtonsoft.Json;
 using Petalaka.Payment.Core.Utils;
 using Petalaka.Payment.Service.ThirdParties.ZaloPay.Interfaces;
+using Petalaka.Payment.Service.ThirdParties.ZaloPay.Models;
 using Petalaka.Payment.Service.ThirdParties.ZaloPay.Settings;
 using Petalaka.Payment.Service.ThirdParties.ZaloPay.Utils;
 
@@ -15,12 +17,11 @@ public class ZaloPayService : IZaloPayService
         _zaloPaySettings = zaloPaySettings;
     }
     
-    public async Task<Dictionary<string, object>> CreateOrderUrl<TItem>(OrderCreationSettings<TItem> orderCreationSettings)
+    public async Task<ZaloPayResponseData> CreateOrderUrl<TItem>(OrderCreationSettings<TItem> orderCreationSettings)
     {
         var param = new Dictionary<string, string>();
         var embeddata = JsonConvert.SerializeObject(orderCreationSettings.Items);
         
-        var ZaloPayHmac = ZaloPayHmacHelper.HmacHelper.Compute(ZaloPayHmacHelper.ZaloPayHMAC.HMACSHA256, _zaloPaySettings.Key1, embeddata);
         param.Add("appid", _zaloPaySettings.AppId);
         param.Add("appuser", orderCreationSettings.AppUser);
         param.Add("apptime", orderCreationSettings.AppTime.ToString());
@@ -30,6 +31,8 @@ public class ZaloPayService : IZaloPayService
         param.Add("item", JsonConvert.SerializeObject(orderCreationSettings.Items));
         param.Add("description", orderCreationSettings.Description);
         param.Add("bankcode", orderCreationSettings.BankCode);
+        if (orderCreationSettings.UserPhone != null) param.Add("phone", orderCreationSettings.UserPhone);
+        if (orderCreationSettings.UserEmail != null) param.Add("email", orderCreationSettings.UserEmail);
 
         var macData = _zaloPaySettings.AppId + "|" + param["apptransid"] + "|" + param["appuser"] + "|" +
                       param["amount"] + "|" + param["apptime"] + "|"
@@ -37,6 +40,17 @@ public class ZaloPayService : IZaloPayService
         param.Add("mac", ZaloPayHmacHelper.HmacHelper.Compute(ZaloPayHmacHelper.ZaloPayHMAC.HMACSHA256, _zaloPaySettings.Key1, macData));
 
         var result = await HttpHelper.PostFormAsync(createOrderUrl, param);
-        return result;
+        
+        return new ZaloPayResponseData()
+        {
+            SubReturnCode = result.GetValueOrDefault("subreturncode", -1),
+            SubReturnMessage = result.GetValueOrDefault("subreturnmessage", ""),
+            OrderUrl = result.GetValueOrDefault("orderurl", ""),
+            ZpTransToken = result.GetValueOrDefault("zptranstoken", ""),
+            OrderToken = result.GetValueOrDefault("ordertoken", ""),
+            QrCode = result.GetValueOrDefault("qrCode", ""),
+            ReturnMessage = result.GetValueOrDefault("returnmessage", ""),
+            ReturnCode = result.GetValueOrDefault("returncode", -1)
+        };
     }
 }

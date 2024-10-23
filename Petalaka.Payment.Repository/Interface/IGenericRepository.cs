@@ -24,5 +24,7 @@ T Find(Expression<Func<T, bool>> predicate);
         void Update(T entity);
         void UpdateRange(IEnumerable<T> entities);
         void Delete(T entity);
+        void DeletePermanent(T entity);
+        Task<PaginationResponse<T>> GetPagination(IQueryable<T> queryable, int pageIndex, int pageSize);
     }
 }

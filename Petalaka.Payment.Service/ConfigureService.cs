@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Amazon.S3;
+using Petalaka.Payment.Service.Services;
 using Petalaka.Payment.Service.ThirdParties.ZaloPay.Settings;
+using Petalaka.PetStore.Service.Services;
 
 
 namespace Petalaka.Payment.Service
@@ -19,6 +21,7 @@ namespace Petalaka.Payment.Service
             services.AddDependencyInjectionService(configuration);
             services.AddMasstransitRabbitmq(configuration);
             services.AddZaloPayConfig(configuration);
+            services.AddGrpcConfig();
         }
 
         public static void AddMasstransitRabbitmq(this IServiceCollection services, IConfiguration configuration)
@@ -55,6 +58,11 @@ namespace Petalaka.Payment.Service
                 zaloPaySettings.IsValid();
                 return zaloPaySettings;
             });
+        }
+        
+        public static void AddGrpcConfig(this IServiceCollection services)
+        {
+            services.AddGrpc();
         }
     }
 }

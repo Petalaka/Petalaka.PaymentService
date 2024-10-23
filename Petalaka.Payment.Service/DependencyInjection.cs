@@ -18,6 +18,10 @@ namespace Petalaka.Payment.Service
         {
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IZaloPayService, ZaloPayService>();
+            services.AddScoped<IPaymentMethod, ZaloPayPayment>();
+            services.AddScoped<ZaloPayPayment>();
+            services.AddScoped<PaymentMethodFactory>();
+            services.AddScoped<IPaymentGatewayService, PaymentGatewayService>();
         }
     }
 }
