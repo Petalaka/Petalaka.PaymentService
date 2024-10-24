@@ -44,7 +44,6 @@ if (app.Environment.IsProduction())
     });
 }
 await app.UseInitializeDatabaseAsync();
-app.UseCors("AllowAll");
 app.UseRouting();
 
 app.UseSwagger();
