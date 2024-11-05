@@ -17,7 +17,8 @@ public class GetOrderWithDetailResponse
     public PaymentStatus PaymentStatus { get; set; }
     public DateTimeOffset? PaymentDate { get; set; }
     public DateTimeOffset? CancelDate { get; set; }
-    
+    public DateTimeOffset CreatedTime { get; set; }
+
     // Navigation Properties
     public Guid UserId { get; set; }
     public Guid BranchId { get; set; }
