@@ -12,6 +12,6 @@ public class OrderDetailBusinessModel : BaseBusinessModel
     public int ItemQuantity { get; set; }
     public ItemType ItemType { get; set; }
     // Navigation Properties
-    
-    public ICollection<OrderDetailAdditionalDetailBusinessModel> OrderDetailAdditionalDetails { get; set; }
+    public Guid OrderId { get; set; }
+    public IList<OrderDetailAdditionalDetailBusinessModel> OrderDetailAdditionalDetails { get; set; }
 }

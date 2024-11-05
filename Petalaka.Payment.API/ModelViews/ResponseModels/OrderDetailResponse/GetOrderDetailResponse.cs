@@ -15,5 +15,5 @@ public class GetOrderDetailResponse
     public ItemType ItemType { get; set; }
     // Navigation Properties
     
-    public ICollection<GetOrderDetailAdditionalDetailResponse> OrderDetailAdditionalDetails { get; set; }
+    public IList<GetOrderDetailAdditionalDetailResponse> OrderDetailAdditionalDetails { get; set; }
 }

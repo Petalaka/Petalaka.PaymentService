@@ -12,4 +12,6 @@ public interface IOrderService
     Task<PaginationResponse<OrderBusinessModel>>
         GetOrderByUser(RequestOptionsBase<GetOrderByUserFilterOptions, GetOrderByUserSortOptions> request,
             UserContext userContext);
+
+    Task<OrderBusinessModel> GetOrderDetail(OrderBusinessModel request);
 }

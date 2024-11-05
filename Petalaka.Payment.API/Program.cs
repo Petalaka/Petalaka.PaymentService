@@ -60,6 +60,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+app.UseMiddleware<CustomExceptionHandlerMiddleware>();
+app.UseMiddleware<ValidateJwtTokenMiddleware>();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapGrpcService<PaymentService>();
@@ -75,8 +77,7 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Service API v1");
 });
-app.UseMiddleware<CustomExceptionHandlerMiddleware>();
-app.UseMiddleware<ValidateJwtTokenMiddleware>();
+
 
 app.MapControllers();
 

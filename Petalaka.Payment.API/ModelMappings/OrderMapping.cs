@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Petalaka.Payment.API.ModelViews.ResponseModels.OrderDetailResponse;
 using Petalaka.Payment.API.ModelViews.ResponseModels.OrderResponse;
+using Petalaka.Payment.API.ModelViews.ResponseModels.PaymentResponse;
 using Petalaka.Payment.Repository.Entities;
 using Petalaka.Payment.Service.BusinessModels;
 
@@ -18,7 +20,14 @@ public class OrderMapping : Profile
             .ForMember(dest => dest.DeleteBy, opt => opt.MapFrom(src => src.DeletedBy));
         
         CreateMap<OrderBusinessModel, Order>();
+
+        CreateMap<PaymentGatewayBusinessModel, OrderBusinessModel>().ReverseMap();
+        CreateMap<OrderDetailBusinessModel, OrderBusinessModel>().ReverseMap();
         
         CreateMap<OrderBusinessModel, GetUserOrderResponse>().ReverseMap();
+        CreateMap<OrderBusinessModel, GetOrderWithDetailResponse>().ReverseMap();
+
+        CreateMap<GetPaymentResponse, GetOrderWithDetailResponse>().ReverseMap();
+        CreateMap<GetOrderDetailResponse, GetOrderWithDetailResponse>().ReverseMap();
     }
 }
