@@ -60,4 +60,20 @@ public class OrdersController : BaseController
         
         return Ok(baseResponsePagination);
     }
+    
+    [HttpGet]
+    [Route("v1/order-detail")]
+    [Authorize]
+    public async Task<ActionResult<BaseResponse<GetOrderWithDetailResponse>>>
+        GetOrderDetail([FromQuery] string orderCode)
+    {
+        var request = new OrderBusinessModel()
+        {
+            OrderCode = orderCode
+        };
+        var order = await _orderService.GetOrderDetail(request);
+        var baseResponse = _mapper.Map<GetOrderWithDetailResponse>(order);
+        
+        return Ok(new BaseResponse(StatusCodes.Status200OK, "Get Order Detail successfully", baseResponse));
+    }
 }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Grpc.Core;
+using Microsoft.AspNetCore.Http;
+using Petalaka.Payment.Core.CustomException;
 using Petalaka.Payment.Core.Utils;
 using Petalaka.Payment.Repository.Base;
 using Petalaka.Payment.Repository.Entities;
@@ -42,7 +44,7 @@ public class OrderService : OrderManager.OrderManagerBase, IOrderService
                 TotalPrice = Convert.ToDecimal(request.OrderAmount),
             };
             await _unitOfWork.GetRepository<Order>().InsertAsync(order);
-            
+
             foreach (var orderDetailRequestGrpc in request.OrderDetail)
             {
                 OrderDetail orderDetail = new OrderDetail()
@@ -55,7 +57,7 @@ public class OrderService : OrderManager.OrderManagerBase, IOrderService
                     ItemQuantity = orderDetailRequestGrpc.ItemQuantity,
                 };
                 await _unitOfWork.GetRepository<OrderDetail>().InsertAsync(orderDetail);
-                
+
                 OrderDetailAdditionalDetail orderDetailAdditionalDetail = new OrderDetailAdditionalDetail()
                 {
                     OrderDetailId = orderDetail.Id,
@@ -64,7 +66,7 @@ public class OrderService : OrderManager.OrderManagerBase, IOrderService
                 };
                 await _unitOfWork.GetRepository<OrderDetailAdditionalDetail>().InsertAsync(orderDetailAdditionalDetail);
             }
-            
+
             await _unitOfWork.SaveChangesAsync();
 
             return new CreatePremiumOrderResponseGrpc()
@@ -84,25 +86,27 @@ public class OrderService : OrderManager.OrderManagerBase, IOrderService
             };
         }
     }
-    
-    
+
+
     /*
     public async Task<OrderBusinessModel> GetOrders()
 */
-    public async Task<PaginationResponse<OrderBusinessModel>> 
-        GetOrderByUser(RequestOptionsBase<GetOrderByUserFilterOptions, GetOrderByUserSortOptions> request, UserContext userContext)
+    public async Task<PaginationResponse<OrderBusinessModel>>
+        GetOrderByUser(RequestOptionsBase<GetOrderByUserFilterOptions, GetOrderByUserSortOptions> request,
+            UserContext userContext)
     {
         var orderQuery = _unitOfWork.GetRepository<Order>().AsQueryable();
 
-        orderQuery = orderQuery.Where(p => p.UserId.ToString() == StringConverterHelper.CapitalizeString(userContext.UserId));
-        
+        orderQuery = orderQuery.Where(p =>
+            p.UserId.ToString() == StringConverterHelper.CapitalizeString(userContext.UserId));
+
         if (request.FilterOptions != null)
         {
             if (request.FilterOptions.OrderStatus != null)
             {
                 orderQuery = orderQuery.Where(p => p.OrderStatus == request.FilterOptions.OrderStatus);
             }
-            
+
             if (request.FilterOptions.PaymentStatus != null)
             {
                 orderQuery = orderQuery.Where(p => p.PaymentStatus == request.FilterOptions.PaymentStatus);
@@ -128,6 +132,17 @@ public class OrderService : OrderManager.OrderManagerBase, IOrderService
         var order = _mapper.Map<IList<OrderBusinessModel>>(queryPaging.Data);
 
         return new PaginationResponse<OrderBusinessModel>
-            (order, queryPaging.PageNumber, queryPaging.PageSize, queryPaging.TotalRecords, queryPaging.CurrentPageRecords);
+        (order, queryPaging.PageNumber, queryPaging.PageSize, queryPaging.TotalRecords,
+            queryPaging.CurrentPageRecords);
+    }
+
+    public async Task<OrderBusinessModel> GetOrderDetail(OrderBusinessModel request)
+    {
+        var order = await _unitOfWork.GetRepository<Order>().FindAsync(p => p.OrderCode == request.OrderCode);
+        if (order == null)
+        {
+            throw new CoreException(StatusCodes.Status400BadRequest, "Order not found");
+        }
+        return _mapper.Map<OrderBusinessModel>(order);
     }
 }

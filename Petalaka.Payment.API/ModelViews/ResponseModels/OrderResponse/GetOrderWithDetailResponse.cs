@@ -1,10 +1,11 @@
-﻿using Petalaka.Payment.Repository.Entities;
+﻿using Petalaka.Payment.API.ModelViews.ResponseModels.OrderDetailResponse;
+using Petalaka.Payment.API.ModelViews.ResponseModels.PaymentGatewayResponse;
 using Petalaka.Payment.Repository.Enums.OrderEnums;
 using Petalaka.Payment.Repository.Enums.PaymentEnums;
 
-namespace Petalaka.Payment.Service.BusinessModels;
+namespace Petalaka.Payment.API.ModelViews.ResponseModels.OrderResponse;
 
-public class OrderBusinessModel : BaseBusinessModel
+public class GetOrderWithDetailResponse
 {
     public Guid Id { get; set; }
     public string OrderCode { get; set; }
@@ -21,8 +22,6 @@ public class OrderBusinessModel : BaseBusinessModel
     public Guid UserId { get; set; }
     public Guid BranchId { get; set; }
     
-    public Guid PaymentGatewayId { get; set; }
-    public PaymentGatewayBusinessModel PaymentGateway { get; set; }
-    
-    public IList<OrderDetailBusinessModel> OrderDetail { get; set; }
+    public GetPaymentGatewayResponse PaymentGateway { get; set; }
+    public IList<GetOrderDetailResponse> OrderDetail { get; set; }
 }
