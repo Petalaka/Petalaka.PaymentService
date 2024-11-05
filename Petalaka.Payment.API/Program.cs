@@ -15,6 +15,10 @@ builder.WebHost.ConfigureKestrel(options =>
     // Set up Kestrel to listen on port 5001 and support HTTP/2
     options.ListenAnyIP(port, listenOptions =>
     {
+        if (builder.Environment.IsDevelopment())
+        {
+            listenOptions.UseHttps();
+        }
         listenOptions.Protocols = HttpProtocols.Http2; // Enable HTTP/2
     });
 });
@@ -59,6 +63,7 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapGrpcService<PaymentService>();
+    endpoints.MapGrpcService<OrderService>();
     endpoints.MapGet("/", async context =>
     {
         await context.Response.WriteAsync(JsonSerializer.Serialize(new

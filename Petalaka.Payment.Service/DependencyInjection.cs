@@ -9,6 +9,7 @@ using Petalaka.Payment.Service.Interface;
 using Petalaka.Payment.Service.Services;
 using Petalaka.Payment.Service.ThirdParties.ZaloPay;
 using Petalaka.Payment.Service.ThirdParties.ZaloPay.Interfaces;
+using Petalaka.Payment.Service.ThirdParties.ZaloPay.Services;
 
 namespace Petalaka.Payment.Service
 {
@@ -22,6 +23,9 @@ namespace Petalaka.Payment.Service
             services.AddScoped<ZaloPayPayment>();
             services.AddScoped<PaymentMethodFactory>();
             services.AddScoped<IPaymentGatewayService, PaymentGatewayService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<ICartItemService, CartItemService>();
         }
     }
 }

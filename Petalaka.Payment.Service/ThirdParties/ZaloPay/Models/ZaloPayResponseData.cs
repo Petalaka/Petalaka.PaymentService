@@ -2,6 +2,7 @@
 
 public class ZaloPayResponseData
 {
+    public string? OrderCode { get; set; }
     public int? ReturnCode { get; set; }
     public string? ReturnMessage { get; set; }
     public int? SubReturnCode { get; set; }

@@ -8,6 +8,7 @@ namespace Petalaka.Payment.Repository.Base.Interface
 {
     public interface IBaseEntity
     {
+        Guid Id { get; set; }
         string? CreatedBy { get; set; }
         string? LastUpdatedBy { get; set; }
         string? DeletedBy { get; set; }

@@ -23,14 +23,14 @@ public class ZaloPayPayment : IPaymentMethod
     {
         var orderCreationSettings = new OrderCreationSettings<PurchasePremiumPlanPayment>()
         {
-            AppUser = request.ProviderId,
-            ApptransId = request.PremiumPlan.Id + "_" + TimeStampHelper.GenerateUnixTimeStampToMilisecond(),
+            AppUser = request.UserId,
+            ApptransId = TimeStampHelper.GenerateUnixTimeStampToMilisecond() + "_" + request.UserId,
             Amount = (long)request.Amount,
-            Description = $"Purchase premium plan {request.PremiumPlan.Name}",
-            Items = [request.PremiumPlan],
+            Description = $"Purchase premium plan",
+            Items = request.PremiumPlan,
             BankCode = "",
-            UserPhone = request.PremiumPlan.UserPhone,
-            UserEmail = request.PremiumPlan.UserEmail,
+            UserPhone = request.UserPhone,
+            UserEmail = request.UserEmail,
             
         };
 
@@ -51,7 +51,8 @@ public class ZaloPayPayment : IPaymentMethod
             PaymentUrl = response.OrderUrl,
             ZaloPayToken = response.ZpTransToken,
             Code = (int)response.ReturnCode!,
-            Success = true
+            Success = true,
+            OrderCode = response.OrderCode
         });
     }
 }

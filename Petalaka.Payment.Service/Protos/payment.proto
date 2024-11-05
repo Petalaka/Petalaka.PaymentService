@@ -11,9 +11,6 @@ message PurchasePremiumPlanPayment {
   string name = 2;
   double price = 3;
   int32 duration = 4;
-  string user_id = 5;
-  string user_email = 6;
-  string user_phone = 7;
 }
 message PremiumPlanPayment {
   string id = 1;
@@ -25,11 +22,13 @@ message PremiumPlanPayment {
   int32 duration = 7;
 }
 message CreatePremiumPlanPaymentRequest {
-  string provider_id = 1;
-  PurchasePremiumPlanPayment premium_plan = 2;
-  double amount = 3;
-  string currency = 4;
-  string payment_method = 5;
+  string user_id = 1;
+  string user_email = 2;
+  string user_phone = 3;
+  repeated PurchasePremiumPlanPayment premium_plan = 4;
+  double amount = 5;
+  string currency = 6;
+  string payment_method = 7;
 }
 
 message CreatePremiumPlanPaymentResponse {
@@ -38,4 +37,5 @@ message CreatePremiumPlanPaymentResponse {
   string zalo_pay_token = 3;
   int32 code = 4;
   bool success = 5;
+  string order_code = 6;
 }

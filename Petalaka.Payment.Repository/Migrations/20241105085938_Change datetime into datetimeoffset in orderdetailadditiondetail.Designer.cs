@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petalaka.Payment.Repository.Base;
 
@@ -11,9 +12,11 @@ using Petalaka.Payment.Repository.Base;
 namespace Petalaka.Payment.Repository.Migrations
 {
     [DbContext(typeof(PetalakaDbContext))]
-    partial class PetalakaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241105085938_Change datetime into datetimeoffset in orderdetailadditiondetail")]
+    partial class Changedatetimeintodatetimeoffsetinorderdetailadditiondetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,6 +197,10 @@ namespace Petalaka.Payment.Repository.Migrations
                     b.Property<long>("OrderExpiry")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("OrderName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
@@ -237,8 +244,9 @@ namespace Petalaka.Payment.Repository.Migrations
                     b.Property<DateTimeOffset?>("DeletedTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("ItemPrice")
                         .HasColumnType("decimal(18,2)");

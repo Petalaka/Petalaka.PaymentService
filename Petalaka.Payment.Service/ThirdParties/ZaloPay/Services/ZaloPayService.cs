@@ -6,7 +6,7 @@ using Petalaka.Payment.Service.ThirdParties.ZaloPay.Models;
 using Petalaka.Payment.Service.ThirdParties.ZaloPay.Settings;
 using Petalaka.Payment.Service.ThirdParties.ZaloPay.Utils;
 
-namespace Petalaka.Payment.Service.ThirdParties.ZaloPay;
+namespace Petalaka.Payment.Service.ThirdParties.ZaloPay.Services;
 
 public class ZaloPayService : IZaloPayService
 {
@@ -21,12 +21,12 @@ public class ZaloPayService : IZaloPayService
     {
         var param = new Dictionary<string, string>();
         var embeddata = JsonConvert.SerializeObject(orderCreationSettings.Items);
-        
+        var appTransId = $"{CoreHelper.SystemTimeNow:yyMMdd}_{orderCreationSettings.ApptransId}";
         param.Add("appid", _zaloPaySettings.AppId);
         param.Add("appuser", orderCreationSettings.AppUser);
         param.Add("apptime", orderCreationSettings.AppTime.ToString());
         param.Add("amount", orderCreationSettings.Amount.ToString());
-        param.Add("apptransid", $"{CoreHelper.SystemTimeNow:yyMMdd}_{orderCreationSettings.ApptransId}");
+        param.Add("apptransid", appTransId);
         param.Add("embeddata", embeddata);
         param.Add("item", JsonConvert.SerializeObject(orderCreationSettings.Items));
         param.Add("description", orderCreationSettings.Description);
@@ -43,6 +43,7 @@ public class ZaloPayService : IZaloPayService
         
         return new ZaloPayResponseData()
         {
+            OrderCode = appTransId,
             SubReturnCode = result.GetValueOrDefault("subreturncode", -1),
             SubReturnMessage = result.GetValueOrDefault("subreturnmessage", ""),
             OrderUrl = result.GetValueOrDefault("orderurl", ""),

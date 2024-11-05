@@ -2,10 +2,10 @@
 
 public class BaseBusinessModel
 {
-    public string? CreatedBy { get; set; }
-    public string? LastUpdatedBy { get; set; }
-    public string? DeletedBy { get; set; }
-    public DateTimeOffset CreatedTime { get; set; }
-    public DateTimeOffset LastUpdatedTime { get; set; }
-    public DateTimeOffset? DeletedTime { get; set; }
+    public string? CreateBy { get; set; }
+    public string? LastUpdateBy { get; set; }
+    public string? DeleteBy { get; set; }
+    public DateTimeOffset CreateTime { get; set; }
+    public DateTimeOffset LastUpdateTime { get; set; }
+    public DateTimeOffset? DeleteTime { get; set; }
 }

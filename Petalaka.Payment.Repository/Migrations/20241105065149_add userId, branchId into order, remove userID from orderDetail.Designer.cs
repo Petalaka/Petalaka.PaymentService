@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petalaka.Payment.Repository.Base;
 
@@ -11,9 +12,11 @@ using Petalaka.Payment.Repository.Base;
 namespace Petalaka.Payment.Repository.Migrations
 {
     [DbContext(typeof(PetalakaDbContext))]
-    partial class PetalakaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241105065149_add userId, branchId into order, remove userID from orderDetail")]
+    partial class adduserIdbranchIdintoorderremoveuserIDfromorderDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,9 +162,6 @@ namespace Petalaka.Payment.Repository.Migrations
                     b.Property<Guid>("BranchId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset?>("CancelDate")
-                        .HasColumnType("datetimeoffset");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -191,30 +191,23 @@ namespace Petalaka.Payment.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("OrderExpiry")
-                        .HasColumnType("bigint");
+                    b.Property<DateTime>("OrderExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("PaymentDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("PaymentGatewayId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("PaymentStatus")
+                    b.Property<int>("OrderType")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PaymentGatewayId");
 
                     b.ToTable("Orders");
                 });
@@ -237,16 +230,14 @@ namespace Petalaka.Payment.Repository.Migrations
                     b.Property<DateTimeOffset?>("DeletedTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("ItemPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ItemQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ItemType")
                         .HasColumnType("int");
 
                     b.Property<string>("LastUpdatedBy")
@@ -262,9 +253,17 @@ namespace Petalaka.Payment.Repository.Migrations
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("PaidDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PaymentGatewayId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("PaymentGatewayId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -275,11 +274,11 @@ namespace Petalaka.Payment.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset?>("CheckInDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("CheckInDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset?>("CheckOutDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("CheckOutDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -302,11 +301,11 @@ namespace Petalaka.Payment.Repository.Migrations
                     b.Property<Guid>("OrderDetailId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset?>("PremiumPlanEndDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("PremiumPlanEndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset?>("PremiumPlanStartDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("PremiumPlanStartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -376,17 +375,6 @@ namespace Petalaka.Payment.Repository.Migrations
                     b.Navigation("CartItemAdditionalDetail");
                 });
 
-            modelBuilder.Entity("Petalaka.Payment.Repository.Entities.Order", b =>
-                {
-                    b.HasOne("Petalaka.Payment.Repository.Entities.PaymentGateway", "PaymentGateway")
-                        .WithMany("Orders")
-                        .HasForeignKey("PaymentGatewayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PaymentGateway");
-                });
-
             modelBuilder.Entity("Petalaka.Payment.Repository.Entities.OrderDetail", b =>
                 {
                     b.HasOne("Petalaka.Payment.Repository.Entities.Order", "Order")
@@ -395,7 +383,15 @@ namespace Petalaka.Payment.Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Petalaka.Payment.Repository.Entities.PaymentGateway", "PaymentGateway")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("PaymentGatewayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Order");
+
+                    b.Navigation("PaymentGateway");
                 });
 
             modelBuilder.Entity("Petalaka.Payment.Repository.Entities.OrderDetailAdditionalDetail", b =>
@@ -426,7 +422,7 @@ namespace Petalaka.Payment.Repository.Migrations
 
             modelBuilder.Entity("Petalaka.Payment.Repository.Entities.PaymentGateway", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }
