@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package Petalaka.PetStore.Service.Services;
+
+service OrderManager {
+  rpc CreatePremiumPlanOrder (CreatePremiumOrderRequestGrpc) returns (CreatePremiumOrderResponseGrpc);
+}
+
+message OrderDetailRequestGrpc {
+  int32 ItemType = 1;
+  string ItemId = 2;
+  string ItemPrice = 3;
+  int32 ItemQuantity = 4;
+}
+
+
+message CreatePremiumOrderRequestGrpc {
+  string OrderCode = 1;
+  string OrderDescription = 2;
+  string OrderAmount = 3;
+  string BranchId = 4;
+  string UserId = 5;
+  string PaymentGatewayId = 6;
+  repeated OrderDetailRequestGrpc OrderDetail = 7;
+}
+
+message CreatePremiumOrderResponseGrpc {
+  string Message = 1;
+  bool IsSuccess = 2;
+  int32 Code = 3;
+}

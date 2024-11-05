@@ -14,5 +14,11 @@ namespace Petalaka.Payment.Repository.Base
         {
         }
         public DbSet<PaymentGateway> PaymentGateways => Set<PaymentGateway>();
+        public DbSet<Cart> Carts => Set<Cart>();
+        public DbSet<CartItem> CartItems => Set<CartItem>();
+        public DbSet<CartItemAdditionalDetail> CartItemAdditionalDetails => Set<CartItemAdditionalDetail>();
+        public DbSet<Order> Orders => Set<Order>();
+        public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
+        public DbSet<OrderDetailAdditionalDetail> OrderDetailAdditionalDetails => Set<OrderDetailAdditionalDetail>();
     }
 }

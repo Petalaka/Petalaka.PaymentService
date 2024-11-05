@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petalaka.Payment.Repository.Base;
 
@@ -11,9 +12,11 @@ using Petalaka.Payment.Repository.Base;
 namespace Petalaka.Payment.Repository.Migrations
 {
     [DbContext(typeof(PetalakaDbContext))]
-    partial class PetalakaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241105125539_remove ordername")]
+    partial class removeordername
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

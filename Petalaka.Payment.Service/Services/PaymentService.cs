@@ -54,7 +54,8 @@ public class PaymentService : PaymentManager.PaymentManagerBase, IPaymentService
             PaymentUrl = response.PaymentUrl,
             ZaloPayToken = response.ZaloPayToken,
             Code = (int)response.Code!,
-            Success = true
+            Success = true,
+            OrderCode = response.OrderCode
         });
     }
 }

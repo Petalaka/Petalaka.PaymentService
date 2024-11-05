@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petalaka.Payment.Repository.Base;
 
@@ -11,9 +12,11 @@ using Petalaka.Payment.Repository.Base;
 namespace Petalaka.Payment.Repository.Migrations
 {
     [DbContext(typeof(PetalakaDbContext))]
-    partial class PetalakaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241105073730_change paymentgateway reference orderdetail into order")]
+    partial class changepaymentgatewayreferenceorderdetailintoorder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,7 +197,14 @@ namespace Petalaka.Payment.Repository.Migrations
                     b.Property<long>("OrderExpiry")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("OrderName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderType")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset?>("PaymentDate")
@@ -237,8 +247,9 @@ namespace Petalaka.Payment.Repository.Migrations
                     b.Property<DateTimeOffset?>("DeletedTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("ItemPrice")
                         .HasColumnType("decimal(18,2)");
@@ -275,11 +286,11 @@ namespace Petalaka.Payment.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset?>("CheckInDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("CheckInDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset?>("CheckOutDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("CheckOutDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -302,11 +313,11 @@ namespace Petalaka.Payment.Repository.Migrations
                     b.Property<Guid>("OrderDetailId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset?>("PremiumPlanEndDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("PremiumPlanEndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset?>("PremiumPlanStartDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("PremiumPlanStartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
