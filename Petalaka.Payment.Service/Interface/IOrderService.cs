@@ -14,4 +14,7 @@ public interface IOrderService
             UserContext userContext);
 
     Task<OrderBusinessModel> GetOrderDetail(OrderBusinessModel request);
+
+    Task<PaginationResponse<OrderBusinessModel>>
+        GetOrders(RequestOptionsBase<GetOrdersFilterOptions, GetOrdersSortOptions> request);
 }
