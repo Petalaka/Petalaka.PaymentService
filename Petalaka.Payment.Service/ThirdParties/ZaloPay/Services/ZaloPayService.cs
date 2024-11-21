@@ -20,7 +20,13 @@ public class ZaloPayService : IZaloPayService
     public async Task<ZaloPayResponseData> CreateOrderUrl<TItem>(OrderCreationSettings<TItem> orderCreationSettings)
     {
         var param = new Dictionary<string, string>();
+        /*
         var embeddata = JsonConvert.SerializeObject(orderCreationSettings.Items);
+        */
+        var embeddata = JsonConvert.SerializeObject(new
+        {
+            redirecturl = "https://petalaka.nodfeather.win"
+        });
         var appTransId = $"{CoreHelper.SystemTimeNow:yyMMdd}_{orderCreationSettings.ApptransId}";
         param.Add("appid", _zaloPaySettings.AppId);
         param.Add("appuser", orderCreationSettings.AppUser);

@@ -8,6 +8,7 @@
     <UserSecretsId>1e00dbeb-aa9c-456a-9ef8-8a99fe3e799e</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <RootNamespace>Petalaka.Payment.API</RootNamespace>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,12 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Petalaka.Payment.Service\Petalaka.Payment.Service.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="..\.dockerignore">
-      <Link>.dockerignore</Link>
-    </Content>
   </ItemGroup>
 
 </Project>

@@ -25,6 +25,7 @@ public class OrderMapping : Profile
         CreateMap<OrderDetailBusinessModel, OrderBusinessModel>().ReverseMap();
         
         CreateMap<OrderBusinessModel, GetUserOrderResponse>().ReverseMap();
+        CreateMap<OrderBusinessModel, GetOrdersResponse>().ReverseMap();
         CreateMap<OrderBusinessModel, GetOrderWithDetailResponse>().ReverseMap();
 
         CreateMap<GetPaymentResponse, GetOrderWithDetailResponse>().ReverseMap();

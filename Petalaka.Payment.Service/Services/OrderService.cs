@@ -35,7 +35,7 @@ public class OrderService : OrderManager.OrderManagerBase, IOrderService
         {
             Order order = new Order()
             {
-                OrderCode = request.OrderCode,
+                OrderCode = StringConverterHelper.CapitalizeString(request.OrderCode),
                 OrderDescription = request.OrderDescription,
                 OrderAmount = Convert.ToDecimal(request.OrderAmount),
                 BranchId = new Guid(request.BranchId),
@@ -50,7 +50,7 @@ public class OrderService : OrderManager.OrderManagerBase, IOrderService
                 OrderDetail orderDetail = new OrderDetail()
                 {
                     OrderId = order.Id,
-                    OrderCode = request.OrderCode,
+                    OrderCode = StringConverterHelper.CapitalizeString(request.OrderCode),
                     ItemType = (ItemType)orderDetailRequestGrpc.ItemType,
                     ItemId = new Guid(orderDetailRequestGrpc.ItemId),
                     ItemPrice = Convert.ToDecimal(orderDetailRequestGrpc.ItemPrice),
@@ -88,9 +88,6 @@ public class OrderService : OrderManager.OrderManagerBase, IOrderService
     }
 
 
-    /*
-    public async Task<OrderBusinessModel> GetOrders()
-*/
     public async Task<PaginationResponse<OrderBusinessModel>>
         GetOrderByUser(RequestOptionsBase<GetOrderByUserFilterOptions, GetOrderByUserSortOptions> request,
             UserContext userContext)
@@ -136,6 +133,52 @@ public class OrderService : OrderManager.OrderManagerBase, IOrderService
             queryPaging.CurrentPageRecords);
     }
 
+    public async Task<PaginationResponse<OrderBusinessModel>>
+        GetOrders(RequestOptionsBase<GetOrdersFilterOptions, GetOrdersSortOptions> request)
+    {
+        var orderQuery = _unitOfWork.GetRepository<Order>().AsQueryable();
+        
+        if (request.FilterOptions != null)
+        {
+            if(request.FilterOptions.OrderCode != null)
+            {
+                orderQuery = orderQuery.Where(p => p.OrderCode == StringConverterHelper.CapitalizeString(request.FilterOptions.OrderCode));
+            }
+            
+            if (request.FilterOptions.OrderStatus != null)
+            {
+                orderQuery = orderQuery.Where(p => p.OrderStatus == request.FilterOptions.OrderStatus);
+            }
+
+            if (request.FilterOptions.PaymentStatus != null)
+            {
+                orderQuery = orderQuery.Where(p => p.PaymentStatus == request.FilterOptions.PaymentStatus);
+            }
+        }
+
+        switch (request.SortOptions)
+        {
+            case GetOrdersSortOptions.TotalPriceAscending:
+                orderQuery = orderQuery.OrderBy(p => p.TotalPrice);
+                break;
+            case GetOrdersSortOptions.TotalPriceDescending:
+                orderQuery = orderQuery.OrderByDescending(p => p.TotalPrice);
+                break;
+            default:
+                orderQuery = orderQuery.OrderByDescending(p => p.CreatedTime);
+                break;
+        }
+
+        var queryPaging = await _unitOfWork.GetRepository<Order>()
+            .GetPagination(orderQuery, request.PageNumber, request.PageSize);
+
+        var order = _mapper.Map<IList<OrderBusinessModel>>(queryPaging.Data);
+
+        return new PaginationResponse<OrderBusinessModel>
+        (order, queryPaging.PageNumber, queryPaging.PageSize, queryPaging.TotalRecords,
+            queryPaging.CurrentPageRecords);
+    }
+    
     public async Task<OrderBusinessModel> GetOrderDetail(OrderBusinessModel request)
     {
         var order = await _unitOfWork.GetRepository<Order>().FindAsync(p => p.OrderCode == request.OrderCode);
