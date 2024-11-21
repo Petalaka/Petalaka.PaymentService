@@ -142,7 +142,7 @@ public class OrderService : OrderManager.OrderManagerBase, IOrderService
         {
             if(request.FilterOptions.OrderCode != null)
             {
-                orderQuery = orderQuery.Where(p => p.OrderCode.Equals(request.FilterOptions.OrderCode, StringComparison.OrdinalIgnoreCase));
+                orderQuery = orderQuery.Where(p => p.OrderCode == StringConverterHelper.CapitalizeString(request.FilterOptions.OrderCode));
             }
             
             if (request.FilterOptions.OrderStatus != null)
