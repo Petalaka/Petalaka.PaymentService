@@ -61,6 +61,39 @@ public class OrdersController : BaseController
         return Ok(baseResponsePagination);
     }
     
+    /// <summary>
+    /// Get Orders by Admin
+    /// </summary>
+    /// <remarks>
+    /// Require authentication as Admin role to perform this function
+    /// 
+    /// OrderStatus:
+    /// - Pending = 1,
+    /// - OverDue = 2,
+    /// - Completed = 3,
+    /// - Cancelled = 4
+    ///
+    /// SortOptions:
+    /// - TotalPriceAscending = 1,
+    /// - TotalPriceDescending = 2,
+    /// </remarks>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("v1/orders")]
+    [Authorize(Roles = "ADMIN")]
+    public async Task<ActionResult<BaseResponsePagination<GetOrdersResponse>>> GetOrders(
+        RequestOptionsBase<GetOrdersFilterOptions, GetOrdersSortOptions> request)
+    {
+        var paginationResponse = await _orderService.GetOrders(request);
+        
+        var baseResponsePagination = _mapper.Map<BaseResponsePagination<GetOrdersResponse>>(paginationResponse);
+        baseResponsePagination.StatusCode = StatusCodes.Status200OK;
+        baseResponsePagination.Message = "Get User Orders successfully";
+        
+        return Ok(baseResponsePagination);
+    }
+    
     [HttpGet]
     [Route("v1/order-detail")]
     [Authorize]

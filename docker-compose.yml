@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  petalaka.payment.api:
+    image: ${DOCKER_REGISTRY-}petalakapaymentapi
+    build:
+      context: .
+      dockerfile: Petalaka.Payment.API/Dockerfile
